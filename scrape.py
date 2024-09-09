@@ -9,7 +9,7 @@ curr_month = str(now.month)
 curr_year = str(now.year)
 
 # Scraping main page (Miami Dade Legislative Index)
-url = 'https://www.miamidade.gov/govaction/Legislative.asp?begdate=8%2F1%2F2024&enddate=' + curr_month + '%2F' + curr_day + '%2F' + curr_year +'&MatterType=AllMatters&submit1=Submit'
+url = f"https://www.miamidade.gov/govaction/Legislative.asp?begdate=8%2F1%2F2024&enddate={curr_month}%2F{curr_day}%2F{curr_year}&MatterType=AllMatters&submit1=Submit"
 response = requests.get(url)
 soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -28,6 +28,7 @@ for link in soup.find_all('a', href=True):
         
         # Construct the valid detailed URL
         detailed_page_url = f"{base_url}?matter={file_number}&file=true&fileAnalysis=false&yearFolder=Y{curr_year}"
+        detailed_pdf_url = f"https://www.miamidade.gov/govaction/legistarfiles/Matters/Y{curr_year}/{file_number}.pdf"
 
         # Request to begin scrapind detailed index page
         detailed_page_response = requests.get(detailed_page_url)
@@ -63,6 +64,7 @@ for link in soup.find_all('a', href=True):
         expiration_date = expiration_date if expiration_date else "N/A"
         
         print(f"Detailed Page URL: {detailed_page_url}")
+        print(f"Detailed PDF URL: {detailed_pdf_url}")
         print(f"File Number: {file_number}")
         print(f"Title: {title}")
         print(f"File Type: {file_type}")
@@ -84,4 +86,5 @@ for link in soup.find_all('a', href=True):
         print(f"Expiration Date: {expiration_date}")
         print(f"Registered Lobbyist: {registered_lobbyist}")
         print("---------")
+        print("")
         count+=1
