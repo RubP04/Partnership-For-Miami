@@ -39,10 +39,12 @@ for link in soup.find_all('a', href=True):
         file_name = detailed_soup.find('strong', string='File Name: ').next_sibling.strip()
         agenda_date = detailed_soup.find('strong', string='Agenda Date: ').next_sibling.strip()
         agenda_item_number = detailed_soup.find('strong', string='Agenda Item Number: ').next_sibling.strip()
-
         title = detailed_soup.find('font', string='Title: ').find_next('font').text.strip()
         indexes = detailed_soup.find('font', string='Indexes: ').find_next('font').text.strip()
         sponsors = detailed_soup.find('font', string='Sponsors: ').find_next('font').text.strip()
+
+        agenda_date = agenda_date if agenda_date else "N/A"
+        agenda_item_number = agenda_item_number if agenda_item_number else "N/A"
 
         
         print(f"Detailed Page URL: {detailed_page_url}")
