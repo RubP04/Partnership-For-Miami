@@ -62,6 +62,7 @@ for link in soup.find_all('a', href=True):
         agenda_item_number = agenda_item_number if agenda_item_number else "N/A"
         effective_date = effective_date if effective_date else "N/A"
         expiration_date = expiration_date if expiration_date else "N/A"
+        detailed_pdf_url = detailed_pdf_url if requests.head(detailed_pdf_url).status_code == 200 else "N/A"
         
         print(f"Detailed Page URL: {detailed_page_url}")
         print(f"Detailed PDF URL: {detailed_pdf_url}")
