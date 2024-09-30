@@ -65,6 +65,11 @@ for link in soup.find_all('a', href=True):
         effective_date = detailed_soup.find('strong', string='Effective Date: ').next_sibling.strip()
         expiration_date = detailed_soup.find('strong', string='Expiration Date: ').next_sibling.strip()
         registered_lobbyist = detailed_soup.find('font', string='Registered Lobbyist: ').find_next('font').text.strip()
+        acting_body = detailed_soup.find('strong', string='Pass/Fail').find_next('font', string=True).text.strip()
+        last_date = detailed_soup.find(string=acting_body).find_next('font').text.strip()
+        agenda_item = detailed_soup.find(string=last_date).find_next('font').text.strip()
+        action = detailed_soup.find(string=last_date).find_next('font').find_next('font').text.strip()
+        sent_to = detailed_soup.find(string=action).find_next('font').text.strip()
         
         cost = cost if cost else "N/A"
         final_action = final_action if final_action else "N/A"
