@@ -10,4 +10,5 @@ To run this project, ensure that the following packages are installed:
 
 - **Python 3.7+**
 - **SQLAlchemy** - For managing the SQLite database and handling queries.
-- **requests
+- **requests**
+- **BeautifulSoup** - For HTML parsing
