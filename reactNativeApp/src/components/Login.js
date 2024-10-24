@@ -1,19 +1,16 @@
 // src/components/Login.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here (for now, just log the email and password)
     console.log('Logged in with:', { email, password });
-
-    // Redirect to CategorySelection after login
-    navigate('/category-selection'); // Adjust the path as needed
+    navigate('/category-selection');
   };
 
   return (
@@ -40,6 +37,9 @@ const Login = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+      <div>
+        <Link to="/forgot-password">Forgot your password?</Link> {/* Add link to Forgot Password page */}
+      </div>
     </div>
   );
 };
