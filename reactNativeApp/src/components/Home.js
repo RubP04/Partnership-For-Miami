@@ -1,6 +1,7 @@
 // src/components/Home.js
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles.css'; // Make sure to adjust the path if needed
 
 const Home = () => {
   const navigate = useNavigate();
@@ -8,10 +9,11 @@ const Home = () => {
   return (
     <div style={{ textAlign: 'center', padding: '50px' }}>
       <h1>Welcome to Our App</h1>
-      <button onClick={() => navigate('/login')} style={{ margin: '10px', padding: '10px 20px' }}>
+      {/* Apply the .button class */}
+      <button onClick={() => navigate('/login')} className="button">
         Go to Login
       </button>
-      <button onClick={() => navigate('/signup')} style={{ margin: '10px', padding: '10px 20px' }}>
+      <button onClick={() => navigate('/signup')} className="button">
         Go to Sign Up
       </button>
     </div>
