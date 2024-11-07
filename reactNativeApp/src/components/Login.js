@@ -1,6 +1,7 @@
 // src/components/Login.js
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link
+import { useNavigate, Link } from 'react-router-dom';
+import '../styles.css'; // Import the CSS file
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,31 +15,33 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px' }}>
+    <div className="login-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="form-group">
           <label>Email:</label>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="input-field"
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Password:</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="input-field"
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" className="button">Login</button>
       </form>
-      <div>
-        <Link to="/forgot-password">Forgot your password?</Link> {/* Add link to Forgot Password page */}
+      <div className="forgot-password">
+        <Link to="/forgot-password">Forgot your password?</Link>
       </div>
     </div>
   );

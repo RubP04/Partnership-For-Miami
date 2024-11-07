@@ -6,6 +6,7 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import CategorySelection from './components/CategorySelection';
 import ForgotPassword from './components/ForgotPassword'; // Import ForgotPassword
+import NotFound from './components/NotFound';
 
 const App = () => {
   return (
@@ -16,6 +17,10 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/category-selection" element={<CategorySelection />} />
         <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Add route for ForgotPassword */}
+
+
+        {/* Catch-all route for 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

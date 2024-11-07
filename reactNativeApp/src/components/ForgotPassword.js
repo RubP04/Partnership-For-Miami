@@ -1,41 +1,38 @@
 // src/components/ForgotPassword.js
 import React, { useState } from 'react';
+import '../styles.css'; // Import the CSS file
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-  const [emailSent, setEmailSent] = useState(false); // New state for email sent status
+  const [emailSent, setEmailSent] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here, you would normally call an API to send the password reset email
     console.log('Password recovery email sent to:', email);
-
-    // Simulate email sending and set the emailSent status to true
     setEmailSent(true);
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px' }}>
+    <div className="forgot-password-container"> {/* Apply container styling */}
       <h2>Forgot Password</h2>
       
-      {/* Show a message if email was sent */}
       {emailSent ? (
-        <div>
+        <div className="email-sent-message">
           <p>A password reset link has been sent to <strong>{email}</strong>. Please check your inbox.</p>
         </div>
       ) : (
-        // Show the form if the email hasn't been sent yet
-        <form onSubmit={handleSubmit}>
-          <div>
+        <form onSubmit={handleSubmit} className="forgot-password-form"> {/* Apply form styling */}
+          <div className="form-group">
             <label>Email:</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="input-field"
             />
           </div>
-          <button type="submit">Send Password Reset Link</button>
+          <button type="submit" className="button">Send Password Reset Link</button> {/* Apply universal button style */}
         </form>
       )}
     </div>
