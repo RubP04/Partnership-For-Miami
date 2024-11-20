@@ -7,7 +7,7 @@ import SignUp from './components/SignUp';
 import CategorySelection from './components/CategorySelection';
 import ForgotPassword from './components/ForgotPassword'; // Import ForgotPassword
 import NotFound from './components/NotFound';
-
+import Scraper from './components/Scraper';
 const App = () => {
   return (
     <Router>
@@ -17,6 +17,7 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/category-selection" element={<CategorySelection />} />
         <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Add route for ForgotPassword */}
+        <Route path="/legislative-entries" element={<Scraper />} /> {/* Add this route */}
 
 
         {/* Catch-all route for 404 */}
