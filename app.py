@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from scrape import scrape_data as fetch_legislative_data
 
@@ -8,12 +8,13 @@ CORS(app)
 @app.route('/api/scrape', methods=['GET'])
 def get_scraped_data():
     try:
-        print("Starting scrape request...")
-        data = fetch_legislative_data()
-        print(f"Data fetched: {data}")
+        page = int(request.args.get('page', 0))
+        batch_size = int(request.args.get('batch_size', 8))
+        start_index = page * batch_size
+        
+        data = fetch_legislative_data(start_index, batch_size)
         return jsonify(data)
     except Exception as e:
-        print(f"Error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
