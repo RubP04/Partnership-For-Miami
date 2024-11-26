@@ -3,6 +3,15 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+beg_month = 8
+beg_day = 1
+beg_year = 2024
+now = datetime.now()
+curr_day = str(now.day)
+curr_month = str(now.month)
+curr_year = str(now.year)
+base_url = 'https://www.miamidade.gov/govaction/matter.asp'
+
 def create_db():
     try:
         conn = sqlite3.connect('legislative_entries.db')
@@ -26,22 +35,12 @@ def scrape_all_entries():
         conn = create_db()
         cursor = conn.cursor()
         
-        # Setup date range
-        beg_month = 8
-        beg_day = 1
-        beg_year = 2024
-        now = datetime.now()
-        curr_day = str(now.day)
-        curr_month = str(now.month)
-        curr_year = str(now.year)
-
         # Scrape main page
         url = f"https://www.miamidade.gov/govaction/Legislative.asp?begdate={beg_month}%2F{beg_day}%2F{beg_year}&enddate={curr_month}%2F{curr_day}%2F{curr_year}&MatterType=AllMatters&submit1=Submit"
         response = requests.get(url)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.text, 'html.parser')
-        base_url = 'https://www.miamidade.gov/govaction/matter.asp'
         
         # Get all links
         all_links = [link for link in soup.find_all('a', href=True) 
@@ -92,3 +91,63 @@ def scrape_all_entries():
         if 'conn' in locals():
             conn.close()
         raise Exception(f"Scraping error: {str(e)}")
+    
+def scrape_specific_entry(file_number):
+    try:
+        detailed_url = f"{base_url}?matter={file_number}&file=true&fileAnalysis=false&yearFolder=Y{curr_year}"
+        detailed_response = requests.get(detailed_url)
+        detailed_response.raise_for_status()
+        detailed_soup = BeautifulSoup(detailed_response.text, 'html.parser')
+
+        # PDF URL
+        detailed_pdf_url = f"https://www.miamidade.gov/govaction/legistarfiles/Matters/Y{curr_year}/{file_number}.pdf"
+        
+        # Check if PDF exists
+        try:
+            pdf_response = requests.head(detailed_pdf_url, timeout=5)
+            detailed_pdf_url = detailed_pdf_url if pdf_response.status_code == 200 else "N/A"
+        except requests.RequestException:
+            detailed_pdf_url = "N/A"
+
+        # Helper function to safely extract text
+        def get_field(soup, field_name, is_font=False):
+            try:
+                if is_font:
+                    element = soup.find('font', string=field_name)
+                    return element.find_next('font').text.strip() if element else "N/A"
+                else:
+                    element = soup.find('strong', string=field_name)
+                    return element.next_sibling.strip() if element else "N/A"
+            except:
+                return "N/A"
+
+        # Build response dictionary
+        return {
+            "file_number": file_number,
+            "file_type": get_field(detailed_soup, 'File Type: '),
+            "status": get_field(detailed_soup, 'Status: '),
+            "version": get_field(detailed_soup, 'Version: '),
+            "control": get_field(detailed_soup, 'Control: '),
+            "file_name": get_field(detailed_soup, 'File Name: '),
+            "introduced": get_field(detailed_soup, 'Introduced: '),
+            "requester": get_field(detailed_soup, 'Requester: '),
+            "cost": get_field(detailed_soup, 'Cost: '),
+            "final_action": get_field(detailed_soup, 'Final Action: '),
+            "agenda_date": get_field(detailed_soup, 'Agenda Date: '),
+            "agenda_item_number": get_field(detailed_soup, 'Agenda Item Number: '),
+            "title": get_field(detailed_soup, 'Title: ', True),
+            "indexes": get_field(detailed_soup, 'Indexes: ', True),
+            "sponsors": get_field(detailed_soup, 'Sponsors: ', True),
+            "sunset_provision": get_field(detailed_soup, 'Sunset Provision: '),
+            "effective_date": get_field(detailed_soup, 'Effective Date: '),
+            "expiration_date": get_field(detailed_soup, 'Expiration Date: '),
+            "registered_lobbyist": get_field(detailed_soup, 'Registered Lobbyist: ', True),
+            "detailed_pdf_url": detailed_pdf_url,
+            "detailed_url": detailed_url
+        }
+
+    except requests.RequestException as e:
+        raise Exception(f"Failed to fetch entry details: {str(e)}")
+    except Exception as e:
+        raise Exception(f"Error processing entry details: {str(e)}")
+
