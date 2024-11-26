@@ -1,121 +1,88 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native';
+import InfoModal from './InfoModal';
 
 const Scraper = () => {
-    const [scrapedData, setScrapedData] = useState({});
+    const [allEntries, setAllEntries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
-    const [hasMore, setHasMore] = useState(true);
-    const [totalEntries, setTotalEntries] = useState(0);
-    const [pageLoadingStates, setPageLoadingStates] = useState({});
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [pageInput, setPageInput] = useState('1');
     const BATCH_SIZE = 8;
-    const PRELOAD_PAGES = 2;
 
-    const fetchData = async (page) => {
-        if (scrapedData[page] || pageLoadingStates[page]) return null;
+    useEffect(() => {
+        // Update page input when currentPage changes
+        setPageInput((currentPage + 1).toString());
+    }, [currentPage]);
 
-        try {
-            setPageLoadingStates(prev => ({ ...prev, [page]: true }));
-            console.log(`Fetching page ${page}`);
-            
-            const response = await fetch(`http://localhost:5000/api/scrape?page=${page}&batch_size=${BATCH_SIZE}`);
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.error || 'Scraping failed');
-            }
-            
-            return data;
-        } catch (err) {
-            console.error(`Error fetching page ${page}:`, err);
-            throw err;
-        } finally {
-            setPageLoadingStates(prev => ({ ...prev, [page]: false }));
+    const handlePageInputChange = (text) => {
+        // Only allow numbers
+        const numericValue = text.replace(/[^0-9]/g, '');
+        setPageInput(numericValue);
+    };
+
+    const handlePageSubmit = () => {
+        const pageNum = parseInt(pageInput, 10) - 1; // Convert to 0-based index
+        const maxPage = Math.ceil(allEntries.length / BATCH_SIZE) - 1;
+        
+        if (pageNum >= 0 && pageNum <= maxPage) {
+            setCurrentPage(pageNum);
+        } else {
+            // Reset to current page if invalid
+            setPageInput((currentPage + 1).toString());
         }
     };
 
-    const preloadPages = useCallback(async () => {
-        const pagesToLoad = [];
-        for (let i = 1; i <= PRELOAD_PAGES; i++) {
-            const pageToLoad = currentPage + i;
-            if (!scrapedData[pageToLoad] && hasMore) {
-                pagesToLoad.push(pageToLoad);
+    const fetchAllEntries = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/entries?all=true');
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to fetch entries');
             }
+            
+            setAllEntries(data.entries);
+        } catch (err) {
+            setError(err.message);
+            console.error('Error fetching entries:', err);
         }
-
-        await Promise.all(
-            pagesToLoad.map(async (page) => {
-                try {
-                    const data = await fetchData(page);
-                    if (data) {
-                        setScrapedData(prev => ({
-                            ...prev,
-                            [page]: data.entries
-                        }));
-                        setHasMore(data.hasMore);
-                        setTotalEntries(data.total);
-                    }
-                } catch (err) {
-                    console.error(`Failed to preload page ${page}:`, err);
-                }
-            })
-        );
-    }, [currentPage, hasMore, scrapedData]);
+    };
 
     useEffect(() => {
-        const loadInitialData = async () => {
-            try {
-                const data = await fetchData(0);
-                if (data) {
-                    setScrapedData({ 0: data.entries });
-                    setTotalEntries(data.total);
-                    setHasMore(data.hasMore);
-                }
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadInitialData();
+        setLoading(true);
+        fetchAllEntries().finally(() => setLoading(false));
     }, []);
 
-    useEffect(() => {
-        if (!loading && hasMore) {
-            preloadPages();
-        }
-    }, [currentPage, loading, hasMore, preloadPages]);
+    const getCurrentPageEntries = () => {
+        const start = currentPage * BATCH_SIZE;
+        return allEntries.slice(start, start + BATCH_SIZE);
+    };
 
-    const handleNextPage = async () => {
-        const nextPage = currentPage + 1;
-        setCurrentPage(nextPage);
-        
-        if (!scrapedData[nextPage]) {
-            try {
-                const data = await fetchData(nextPage);
-                if (data) {
-                    setScrapedData(prev => ({
-                        ...prev,
-                        [nextPage]: data.entries
-                    }));
-                }
-            } catch (err) {
-                setError(err.message);
-            }
+    const handleNextPage = () => {
+        if ((currentPage + 1) * BATCH_SIZE < allEntries.length) {
+            setCurrentPage(prev => prev + 1);
         }
     };
 
     const handlePrevPage = () => {
-        setCurrentPage(prev => Math.max(0, prev - 1));
+        if (currentPage > 0) {
+            setCurrentPage(prev => prev - 1);
+        }
+    };
+
+    const handleMoreInfo = (fileNumber) => {
+        setSelectedFile(fileNumber);
+        setModalVisible(true);
     };
 
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#007AFF" />
-                <Text style={styles.loadingText}>Fetching Legislative Entries...</Text>
+                <Text style={styles.loadingText}>Loading entries...</Text>
             </View>
         );
     }
@@ -126,7 +93,7 @@ const Scraper = () => {
                 <Text style={styles.error}>{error}</Text>
                 <TouchableOpacity 
                     style={styles.retryButton}
-                    onPress={() => window.location.reload()}
+                    onPress={fetchAllEntries}
                 >
                     <Text style={styles.retryButtonText}>Retry</Text>
                 </TouchableOpacity>
@@ -134,40 +101,33 @@ const Scraper = () => {
         );
     }
 
-    const currentPageData = scrapedData[currentPage] || [];
-    const isCurrentPageLoading = pageLoadingStates[currentPage];
+    const currentEntries = getCurrentPageEntries();
+    const hasMore = (currentPage + 1) * BATCH_SIZE < allEntries.length;
 
     return (
         <View style={styles.container}>
-            {isCurrentPageLoading ? (
-                <View style={styles.pageLoadingContainer}>
-                    <ActivityIndicator size="large" color="#007AFF" />
-                    <Text style={styles.loadingText}>Loading Page {currentPage + 1}...</Text>
-                </View>
-            ) : (
-                <ScrollView style={styles.dataContainer}>
-                    <Text style={styles.heading}>
-                        Legislative Entries ({currentPage * BATCH_SIZE + 1}-
-                        {Math.min((currentPage + 1) * BATCH_SIZE, totalEntries)} of {totalEntries})
-                    </Text>
-                    {currentPageData.map((entry, index) => (
-                        <View key={index} style={styles.entry}>
-                            <View style={styles.entryContent}>
-                                <View style={styles.entryText}>
-                                    <Text style={styles.fileNumber}>File Number: {entry[0]}</Text>
-                                    <Text style={styles.fileName}>Name: {entry[1]}</Text>
-                                </View>
-                                <TouchableOpacity 
-                                    style={styles.moreInfoButton}
-                                    onPress={() => console.log('More info clicked for:', entry[0])}
-                                >
-                                    <Text style={styles.moreInfoButtonText}>More Info</Text>
-                                </TouchableOpacity>
+            <ScrollView style={styles.dataContainer}>
+                <Text style={styles.heading}>
+                    Legislative Entries ({currentPage * BATCH_SIZE + 1}-
+                    {Math.min((currentPage + 1) * BATCH_SIZE, allEntries.length)} of {allEntries.length})
+                </Text>
+                {currentEntries.map((entry, index) => (
+                    <View key={index} style={styles.entry}>
+                        <View style={styles.entryContent}>
+                            <View style={styles.entryText}>
+                                <Text style={styles.fileNumber}>File Number: {entry[0]}</Text>
+                                <Text style={styles.fileName}>Name: {entry[1]}</Text>
                             </View>
+                            <TouchableOpacity 
+                                style={styles.moreInfoButton}
+                                onPress={() => handleMoreInfo(entry[0])}
+                            >
+                                <Text style={styles.moreInfoButtonText}>More Info</Text>
+                            </TouchableOpacity>
                         </View>
-                    ))}
-                </ScrollView>
-            )}
+                    </View>
+                ))}
+            </ScrollView>
             
             <View style={styles.paginationContainer}>
                 <TouchableOpacity 
@@ -178,7 +138,19 @@ const Scraper = () => {
                     <Text style={styles.pageButtonText}>Previous</Text>
                 </TouchableOpacity>
                 
-                <Text style={styles.pageText}>Page {currentPage + 1}</Text>
+                <View style={styles.pageInputContainer}>
+                    <Text style={styles.pageText}>Page </Text>
+                    <TextInput
+                        style={styles.pageInput}
+                        value={pageInput}
+                        onChangeText={handlePageInputChange}
+                        onSubmitEditing={handlePageSubmit}
+                        onBlur={handlePageSubmit}
+                        keyboardType="number-pad"
+                        maxLength={4}
+                    />
+                    <Text style={styles.pageText}> of {Math.ceil(allEntries.length / BATCH_SIZE)}</Text>
+                </View>
                 
                 <TouchableOpacity 
                     style={[styles.pageButton, !hasMore && styles.pageButtonDisabled]}
@@ -188,6 +160,12 @@ const Scraper = () => {
                     <Text style={styles.pageButtonText}>Next</Text>
                 </TouchableOpacity>
             </View>
+            
+            <InfoModal 
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                fileNumber={selectedFile}
+            />
         </View>
     );
 };
@@ -230,10 +208,42 @@ const styles = StyleSheet.create({
     dataContainer: {
         flex: 1,
     },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
     heading: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 10,
+        flex: 1,
+    },
+    goToPageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 10,
+    },
+    goToPageInput: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 5,
+        width: 80,
+        marginRight: 5,
+        textAlign: 'center',
+    },
+    goButton: {
+        backgroundColor: '#007AFF',
+        padding: 8,
+        borderRadius: 5,
+        minWidth: 40,
+        alignItems: 'center',
+    },
+    goButtonText: {
+        color: 'white',
+        fontSize: 14,
+        fontWeight: '500',
     },
     entry: {
         backgroundColor: '#f5f5f5',
@@ -276,6 +286,26 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: '#eee',
     },
+    pageInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    pageInput: {
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 5,
+        width: 50,
+        textAlign: 'center',
+        marginHorizontal: 5,
+        color: '#333',
+    },
+    pageText: {
+        fontSize: 14,
+        color: '#666',
+    },
     pageButton: {
         backgroundColor: '#007AFF',
         padding: 10,
@@ -290,16 +320,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 14,
         fontWeight: '500',
-    },
-    pageText: {
-        fontSize: 14,
-        color: '#666',
-    },
-    pageLoadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
+    }
 });
 
 export default Scraper;
