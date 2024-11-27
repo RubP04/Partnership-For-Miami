@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "firebase": "^11.0.2"
+    "firebase": "^11.0.2",
+    "flask": "^0.2.10",
+    "flask-cors": "^0.0.1",
+    "request": "^2.88.2"
   }
 }
