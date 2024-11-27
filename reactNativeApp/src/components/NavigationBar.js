@@ -15,32 +15,32 @@ const renderLinks = () => {
       <>
         <Link to="/login" >Login</Link>
         <Link to= "/signup">Sign Up</Link>
-        <Link to= "/CategorySelection">Category Selection</Link>
+        
         </>
     );
     } else if (location.pathname === '/signup') {
         //on the sign up page displayed: Home, Login, and Category Selection
         return(
         <>
-            <Link to=" /landing">Home</Link>
+            <Link to="/">Home</Link>
             <Link to="/login">Login</Link>
-            <Link to="/category-selection">Category Selection</Link>
+            
          </>
         );
     } else if (location.pathname === '/login') {
         return(
             <>
-            <Link to=" /landing">Home</Link>
+            <Link to="/">Home</Link>
             <Link to="/signup">Sign Up</Link>
-            <Link to="/category-selection">Category Selection</Link>
+            
             </>
         );
     } else {
         //default for other page 
         return (
             <>
-            <Link to="/landing ">Home</Link>
-            <Link to="/category-selection">Category Selection</Link>
+            <Link to="/">Home</Link>
+            
             </>
         );
     }

@@ -8,12 +8,30 @@ import CategorySelection from './components/CategorySelection';
 import ForgotPassword from './components/ForgotPassword';
 import NotFound from './components/NotFound';
 import Scraper from './components/Scraper';
-import NavigationBar from './components/NavigationBar'; //import navigationBar
+import NavigationBar from './components/NavigationBar';
 
 const App = () => {
   return (
     <Router>
-      <NavigationBar />
+      <AppContent />
+    </Router>
+  );
+};
+
+const AppContent = () => {
+  const location = useLocation();
+
+  // Define paths where the NavigationBar should be hidden
+  const hideNavbarPaths = ['/legislative-entries'];
+
+  // Check if the current path is in the array of paths to hide the navbar
+  const shouldHideNavbar = hideNavbarPaths.includes(location.pathname);
+
+  return (
+    <>
+      {/* Conditionally render the NavigationBar */}
+      {!shouldHideNavbar && <NavigationBar />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -24,7 +42,7 @@ const App = () => {
         {/* Catch-all route for 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </Router>
+    </>
   );
 };
 
