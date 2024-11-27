@@ -1,36 +1,39 @@
 // src/components/SignUp.js
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import '../styles.css'; // Import the CSS file
+import { createUserWithEmailAndPassword } from 'firebase/auth'; // Import Firebase function
+import { auth } from '../firebase'; // Import the initialized auth object
+import '../styles.css';
 
 const SignUp = () => {
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic for sign-up here (e.g., API call)
-    console.log('Account created for:', { username, email });
-    navigate('/category-selection');
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    try {
+      // Create user with Firebase
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log('Account created:', { email });
+      navigate('/category-selection');
+    } catch (error) {
+      setError(error.message); // Handle errors
+      console.error(error);
+    }
   };
 
   return (
-    <div className="signup-container"> {/* Apply container styling */}
+    <div className="signup-container">
       <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit} className="signup-form"> {/* Apply form styling */}
-        <div className="form-group">
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-            className="input-field"
-          />
-        </div>
+      {error && <p className="error">{error}</p>} {/* Display errors */}
+      <form onSubmit={handleSubmit} className="signup-form">
         <div className="form-group">
           <label>Email:</label>
           <input
@@ -61,10 +64,10 @@ const SignUp = () => {
             className="input-field"
           />
         </div>
-        <button type="submit" className="button">Sign Up</button> {/* Apply universal button style */}
+        <button type="submit" className="button">Sign Up</button>
       </form>
       <div className="login-link">
-        <p>Already have an account? <Link to="/login">Log In</Link></p> {/* Add link to login page */}
+        <p>Already have an account? <Link to="/login">Log In</Link></p>
       </div>
     </div>
   );
