@@ -8,8 +8,7 @@ import CategorySelection from './components/CategorySelection';
 import ForgotPassword from './components/ForgotPassword'; // Import ForgotPassword
 import NotFound from './components/NotFound';
 import Scraper from './components/Scraper';
-import PolicyList from '.PolicyList';
-import PolicyDetails from './PolicyDetails';
+
 const App = () => {
   return (
     <Router>
@@ -20,8 +19,7 @@ const App = () => {
         <Route path="/category-selection" element={<CategorySelection />} />
         <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Add route for ForgotPassword */}
         <Route path="/legislative-entries" element={<Scraper />} /> {/* Add this route */}
-        <Route path = "/" element={<PolicyList />} />
-        <Route path=" /policy-details/:id" element={<PolicyDetails />} />
+
 
 
         {/* Catch-all route for 404 */}
