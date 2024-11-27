@@ -54,15 +54,6 @@ const Home = () => {
             Start now to take control of the information that matters most to you and play an active role in shaping your neighborhood.
           </p>
         </div>
-        <div className="action-buttons">
-          {/* Use Link to navigate to the respective pages */}
-          <Link to="/signup">
-            <button className="button">Sign Up</button> {/* Apply the button class here */}
-          </Link>
-          <Link to="/login">
-            <button className="button">Login</button> {/* Apply the button class here */}
-          </Link>
-        </div>
       </section>
     </div>
   );
