@@ -39,7 +39,7 @@ const renderLinks = () => {
         //default for other page 
         return (
             <>
-            <Link to=" /">Home</Link>
+            <Link to=" ">Home</Link>
             <Link to="/category-selection">Category Selection</Link>
             </>
         );
