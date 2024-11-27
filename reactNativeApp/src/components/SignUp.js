@@ -24,7 +24,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       await createUserWithEmailAndPassword(auth, email, password);
-      navigate('/legislative');
+      navigate('/legislative-entries');
     } catch (error) {
       console.log(error)
       switch (error.code) {
