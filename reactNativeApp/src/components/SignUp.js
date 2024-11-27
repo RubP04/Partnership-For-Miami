@@ -22,7 +22,7 @@ const SignUp = () => {
       // Create user with Firebase
       await createUserWithEmailAndPassword(auth, email, password);
       console.log('Account created:', { email });
-      navigate('/category-selection');
+      navigate('/legislative-entries');
     } catch (error) {
       setError(error.message); // Handle errors
       console.error(error);

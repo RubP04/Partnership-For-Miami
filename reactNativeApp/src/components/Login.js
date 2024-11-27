@@ -17,7 +17,7 @@ const Login = () => {
       // Sign in user with Firebase
       await signInWithEmailAndPassword(auth, email, password);
       console.log('Logged in with:', { email });
-      navigate('/category-selection');
+      navigate('/legislative-entries');
     } catch (error) {
       setError(error.message); // Handle errors
       console.error(error);
