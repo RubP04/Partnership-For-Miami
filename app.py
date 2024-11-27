@@ -159,15 +159,6 @@ def get_entry_summary(file_number):
                 elif response.status_code == 503:
                     wait_time = base_wait * (2 ** attempt)  # Exponential backoff
                     print(f"Model loading, attempt {attempt + 1} of {max_retries}. Waiting {wait_time} seconds...")
-                    
-                    if attempt == 0:
-                        # Return initial summary on first 503
-                        return jsonify({
-                            "summary": initial_summary,
-                            "status": "initializing",
-                            "retry_after": wait_time
-                        })
-                    
                     time.sleep(wait_time)
                     continue
                     
