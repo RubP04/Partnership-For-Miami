@@ -13,15 +13,11 @@ const NavigationBar = () => {
                 <Link to="/" className="nav-item">
                     Home 
                 </Link>
-                
                 <Link to="/Login" className="nav-item">
                     Login 
                 </Link>
                 <Link to ="/signup" className="nav-item">
                     Sign Up
-                </Link>
-                <Link to= "/CategorySelection" className="nav-item">
-                    Category Selection
                 </Link>
                 </div>
         </nav>
