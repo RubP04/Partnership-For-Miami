@@ -373,6 +373,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
         alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
     },
     searchInput: {
         flex: 1,
@@ -381,7 +383,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginRight: 10,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     searchButton: {
         backgroundColor: '#007AFF',
