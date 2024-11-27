@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { sendPasswordResetEmail } from 'firebase/auth'; // Import Firebase function
 import { auth } from '../firebase'; // Import the initialized auth object
-import '../styles.css'; // Import shared styles
+import './login.css'; // Import shared styles
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');

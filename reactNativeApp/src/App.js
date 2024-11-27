@@ -8,6 +8,7 @@ import CategorySelection from './components/CategorySelection';
 import ForgotPassword from './components/ForgotPassword'; // Import ForgotPassword
 import NotFound from './components/NotFound';
 import Scraper from './components/Scraper';
+
 const App = () => {
   return (
     <Router>
@@ -21,7 +22,7 @@ const App = () => {
 
 
         {/* Catch-all route for 404 */}
-        <Route path="*" element={<NotFound />} />
+       <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
