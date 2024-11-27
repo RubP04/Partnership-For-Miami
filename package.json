@@ -3,6 +3,7 @@
     "firebase": "^11.0.2",
     "flask": "^0.2.10",
     "flask-cors": "^0.0.1",
+    "react-native-vector-icons": "^10.2.0",
     "request": "^2.88.2"
   }
 }

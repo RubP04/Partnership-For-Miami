@@ -183,6 +183,52 @@ def get_entry_summary(file_number):
     except Exception as e:
         print(f"Error generating summary: {str(e)}")
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/api/search', methods=['GET'])
+def search_entries():
+    try:
+        query = request.args.get('query', '').strip()
+        page = int(request.args.get('page', 0))
+        batch_size = int(request.args.get('batch_size', 8))
+        
+        if not query:
+            return jsonify({"error": "Search query is required"}), 400
+
+        conn = sqlite3.connect('legislative_entries.db')
+        cursor = conn.cursor()
+        
+        # Search by file number or title (case-insensitive, partial match)
+        cursor.execute('''
+            SELECT file_number, title 
+            FROM legislative_entries 
+            WHERE file_number LIKE ? OR LOWER(title) LIKE LOWER(?)
+            ORDER BY file_number DESC
+            LIMIT ? OFFSET ?
+        ''', (f'%{query}%', f'%{query}%', batch_size, page * batch_size))
+        
+        entries = cursor.fetchall()
+        
+        # Get total count of search results
+        cursor.execute('''
+            SELECT COUNT(*) 
+            FROM legislative_entries 
+            WHERE file_number LIKE ? OR LOWER(title) LIKE LOWER(?)
+        ''', (f'%{query}%', f'%{query}%'))
+        
+        total_entries = cursor.fetchone()[0]
+        
+        conn.close()
+        
+        return jsonify({
+            'entries': entries,
+            'total': total_entries,
+            'hasMore': (page + 1) * batch_size < total_entries
+        })
+        
+    except Exception as e:
+        if 'conn' in locals():
+            conn.close()
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000) 
