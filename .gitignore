@@ -93,3 +93,34 @@ dmypy.json
 
 # VSCode specific
 .vscode/
+
+# Database files
+*.db
+legislative_entries.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# React Native
+node_modules/
+.expo/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store
