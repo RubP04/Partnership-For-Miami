@@ -6,8 +6,8 @@ const NavigationBar = () => {
     return (
         <nav className= "navbar">
             <div className="navbar-logo">
-                <img src="../logo.svg" alt="Partnership for Miami" />
-                <h1 style={{ color: 'white', fontSize: '24px'}}> Policy App</h1>
+                <img src="../legal loop.png" alt="Partnership for Miami" />
+                <h1 style={{ color: 'white', fontSize: '24px'}}> Legal Loop</h1>
             </div>
             <div className="navbar-links">
                 <Link to="/" className="nav-item">
