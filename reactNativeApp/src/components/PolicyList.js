@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
-import styles from '.styles.css';
+import '../styles.css';
 import { useNavigate } from 'react-router-dom';
 
 const PolicyList =() => {
