@@ -1,9 +1,10 @@
 /* Universal Styles */
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+*{font-family: 'lora'}
+
 body {
-  margin: 0;
-  font-family: "Lora", serif;  
-  
+  margin: 0;  
   background: linear-gradient(279deg, #dcffff, #ead7fd, #f7d7d7);
   background-size: 600% 600%;
 
@@ -75,25 +76,77 @@ img {
 }
 
 /* LandingPage.css */
+
+/* General styles for the landing page */
 .landing-page {
-  font-family: Arial, sans-serif;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* Each section layout */
 .landing-section {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-around;
-  padding: 2rem;
+  flex-wrap: wrap; /* Allows wrapping for smaller screens */
+  padding: 80px 20px; /* Increase padding for more spacing */
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 30px; /* Add space between sections */
 }
 
+/* Text content styling */
 .text-content {
-  max-width: 50%;
+  max-width: 700px; /* Allow more room for larger text */
+  margin: 0 auto;
+  text-align: left;
 }
 
-img {
-  max-width: 40%;
-  border-radius: 10px;
+.text-content h1,
+.text-content h2 {
+  font-size: 2.5rem; /* Larger font for headings */
+  line-height: 1.4; /* Slightly taller line height for readability */
+  margin-bottom: 20px;
 }
+
+.text-content p {
+  font-size: 1.25rem; /* Increase paragraph font size */
+  line-height: 1.8; /* Add more line height for spacing */
+  margin-bottom: 20px;
+}
+
+/* Images in sections */
+.landing-section img {
+  width: 45%; /* Adjust size to balance with larger text */
+  height: auto;
+  margin: 20px;
+}
+
+/* Specific call-to-action styling */
+.call-to-action {
+  text-align: center;
+  padding: 60px 20px; /* Increase padding for prominence */
+}
+
+.call-to-action h2 {
+  font-size: 2.5rem; /* Larger headline */
+  margin-bottom: 20px;
+}
+
+.call-to-action p {
+  font-size: 1.25rem;
+  margin-bottom: 30px; /* Add space before buttons */
+}
+
+/* Action buttons container */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
 
 /* Footer.css */
 .footer {
@@ -474,4 +527,56 @@ label {
 
 .button:hover {
   background-color: #006699; /* Darker blue on hover */
+}
+
+/* 404 Page Container */
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  text-align: center;
+  color: #333; /* Neutral text color */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Logo Style */
+.logo {
+  max-width: 150px; /* Adjust logo size */
+  margin-bottom: 20px;
+  animation: bounce 2s infinite; /* Add a subtle animation */
+}
+
+/* Bounce Animation for the logo */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Error Code Styling */
+.error-code {
+  font-size: 6rem; /* Large and bold for emphasis */
+  font-weight: bold;
+  color: #ff6f61; /* Eye-catching red-orange color */
+  margin: 10px 0;
+}
+
+/* Error Message Styling */
+.error-message {
+  font-size: 2.5rem; /* Secondary headline */
+  margin-bottom: 10px;
+  color: #555; /* Slightly lighter for contrast */
+}
+
+/* Error Description Styling */
+.error-description {
+  font-size: 1.25rem;
+  color: #777; /* Softer tone for less prominent text */
+  margin-bottom: 30px;
 }
