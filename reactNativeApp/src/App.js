@@ -8,10 +8,12 @@ import CategorySelection from './components/CategorySelection';
 import ForgotPassword from './components/ForgotPassword'; // Import ForgotPassword
 import NotFound from './components/NotFound';
 import Scraper from './components/Scraper';
+import NavigationBar from './components/NavigationBar';
 
 const App = () => {
   return (
     <Router>
+      <NavigationBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
