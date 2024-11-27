@@ -1,9 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native';
-import InfoModal from './InfoModal';
+// Scraper.jsx
 
-const Scraper = () => {
-    const [originalEntries, setOriginalEntries] = useState([]); // Cache for all entries
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+    View,
+    Text,
+    ScrollView,
+    StyleSheet,
+    ActivityIndicator,
+    TouchableOpacity,
+    TextInput,
+    Modal,
+} from 'react-native';
+import InfoModal from './InfoModal';
+import CategorySelection from './CategorySelection';
+import { getAuth, signOut } from 'firebase/auth';
+
+const Scraper = ({ navigation }) => {
+    const [originalEntries, setOriginalEntries] = useState([]);
     const [allEntries, setAllEntries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,6 +28,14 @@ const Scraper = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearchMode, setIsSearchMode] = useState(false);
     const BATCH_SIZE = 8;
+
+    const navigate = useNavigate();
+    const auth = getAuth();
+
+
+    // New state variables
+    const [sidePanelVisible, setSidePanelVisible] = useState(false);
+    const [preferencesModalVisible, setPreferencesModalVisible] = useState(false);
 
     useEffect(() => {
         // Update page input when currentPage changes
@@ -43,7 +65,9 @@ const Scraper = () => {
         try {
             setLoading(true);
             const lowerCaseQuery = query.trim().toUpperCase();
-            const response = await fetch(`http://localhost:5000/api/search?query=${encodeURIComponent(lowerCaseQuery)}&page=${currentPage}`);
+            const response = await fetch(
+                `http://localhost:5000/api/search?query=${encodeURIComponent(lowerCaseQuery)}&page=${currentPage}`
+            );
             const data = await response.json();
 
             if (!response.ok) {
@@ -118,6 +142,15 @@ const Scraper = () => {
         setModalVisible(true);
     };
 
+    const handleLogout = async () => {
+        try {
+          await signOut(auth);
+          navigate('/login'); // Navigate to the login page
+        } catch (error) {
+          console.error('Error logging out:', error);
+        }
+      };
+
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
@@ -143,6 +176,14 @@ const Scraper = () => {
 
     return (
         <View style={styles.container}>
+            {/* Header with Menu Button */}
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.menuButton} onPress={() => setSidePanelVisible(true)}>
+                    <Text style={styles.menuButtonText}>Menu</Text>
+                </TouchableOpacity>
+            </View>
+
+            {/* Search Bar */}
             <View style={styles.searchContainer}>
                 <TextInput
                     style={styles.searchInput}
@@ -161,10 +202,12 @@ const Scraper = () => {
                 )}
             </View>
 
+            {/* Entries List */}
             <ScrollView style={styles.dataContainer}>
                 <Text style={styles.heading}>
                     {isSearchMode ? 'Search Results' : 'Legislative Entries'} (
-                    {currentPage * BATCH_SIZE + 1}-{Math.min((currentPage + 1) * BATCH_SIZE, allEntries.length)} of {allEntries.length})
+                    {currentPage * BATCH_SIZE + 1}-
+                    {Math.min((currentPage + 1) * BATCH_SIZE, allEntries.length)} of {allEntries.length})
                 </Text>
                 {currentEntries.map((entry, index) => (
                     <View key={index} style={styles.entry}>
@@ -181,6 +224,7 @@ const Scraper = () => {
                 ))}
             </ScrollView>
 
+            {/* Pagination */}
             <View style={styles.paginationContainer}>
                 <TouchableOpacity
                     style={[styles.pageButton, currentPage === 0 && styles.pageButtonDisabled]}
@@ -213,7 +257,54 @@ const Scraper = () => {
                 </TouchableOpacity>
             </View>
 
+            {/* Info Modal */}
             <InfoModal visible={modalVisible} onClose={() => setModalVisible(false)} fileNumber={selectedFile} />
+
+            {/* Side Panel Modal */}
+            <Modal
+                visible={sidePanelVisible}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={() => setSidePanelVisible(false)}
+            >
+                <TouchableOpacity
+                    style={styles.modalOverlay}
+                    onPress={() => setSidePanelVisible(false)}
+                    activeOpacity={1}
+                />
+                <View style={styles.sidePanel}>
+                    <TouchableOpacity
+                        style={styles.closeButton}
+                        onPress={() => setSidePanelVisible(false)}
+                    >
+                        <Text style={styles.closeButtonText}>X</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.sidePanelButton}
+                        onPress={() => {
+                            setSidePanelVisible(false);
+                            setPreferencesModalVisible(true);
+                        }}
+                    >
+                        <Text style={styles.sidePanelButtonText}>Preferences</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.sidePanelButton}
+                        onPress={handleLogout}
+                    >
+                        <Text style={styles.sidePanelButtonText}>Logout</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+
+            {/* Preferences Modal */}
+            <Modal
+                visible={preferencesModalVisible}
+                animationType="slide"
+                onRequestClose={() => setPreferencesModalVisible(false)}
+            >
+                <CategorySelection onClose={() => setPreferencesModalVisible(false)} />
+            </Modal>
         </View>
     );
 };
@@ -255,43 +346,6 @@ const styles = StyleSheet.create({
     },
     dataContainer: {
         flex: 1,
-    },
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-    heading: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        flex: 1,
-    },
-    goToPageContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginLeft: 10,
-    },
-    goToPageInput: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 5,
-        width: 80,
-        marginRight: 5,
-        textAlign: 'center',
-    },
-    goButton: {
-        backgroundColor: '#007AFF',
-        padding: 8,
-        borderRadius: 5,
-        minWidth: 40,
-        alignItems: 'center',
-    },
-    goButtonText: {
-        color: 'white',
-        fontSize: 14,
-        fontWeight: '500',
     },
     entry: {
         backgroundColor: '#f5f5f5',
@@ -403,6 +457,53 @@ const styles = StyleSheet.create({
     clearSearchButtonText: {
         color: 'white',
         fontWeight: '600',
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        justifyContent: 'flex-start',
+    },
+    menuButton: {
+        backgroundColor: '#007AFF',
+        padding: 10,
+        borderRadius: 5,
+    },
+    menuButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    sidePanel: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '70%',
+        height: '100%',
+        backgroundColor: '#fff',
+        paddingTop: 50,
+        paddingHorizontal: 20,
+        elevation: 5,
+    },
+    sidePanelButton: {
+        paddingVertical: 15,
+    },
+    sidePanelButtonText: {
+        fontSize: 18,
+        color: '#007AFF',
+    },
+    closeButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+    },
+    closeButtonText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)',
     },
 });
 

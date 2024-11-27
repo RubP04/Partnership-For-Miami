@@ -1,66 +1,149 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+// CategorySelection.jsx
 
-const CategorySelection = ({ navigation }) => {
+import React, { useState, useEffect } from 'react';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    ScrollView,
+} from 'react-native';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
-  // Function to handle category selection
-  const handleCategoryPress = (category) => {
-    // Here, you could navigate to the category-specific page
-    // navigation.navigate('CategoryDetails', { category });
-    alert(`You selected ${category}`);
-  };
+const CategorySelection = ({ onClose }) => {
+    const [preferences, setPreferences] = useState([]); // Current user preferences
+    const categories = ['Education', 'Transport', 'Housing', 'Other']; // Available categories
+    const auth = getAuth();
+    const db = getFirestore();
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Select the type of information:</Text>
+    const initializePreferences = async (uid) => {
+        const docRef = doc(db, 'users', uid);
+        const docSnap = await getDoc(docRef);
 
-      <TouchableOpacity style={styles.button} onPress={() => handleCategoryPress('School')}>
-        <Text style={styles.buttonText}>School</Text>
-      </TouchableOpacity>
+        if (!docSnap.exists()) {
+            console.log("Document does not exist, initializing preferences.");
+            await setDoc(docRef, { preferences: [] });
+            return [];
+        }
+        console.log("Document exists:", docSnap.data());
+        return docSnap.data().preferences || [];
+    };
 
-      <TouchableOpacity style={styles.button} onPress={() => handleCategoryPress('Transport')}>
-        <Text style={styles.buttonText}>Transport</Text>
-      </TouchableOpacity>
+    useEffect(() => {
+        const fetchPreferencesForUser = async (user) => {
+            try {
+                const userPreferences = await initializePreferences(user.uid);
+                console.log('Fetched preferences:', userPreferences); // Debug log
+                setPreferences(userPreferences || []); // Ensure preferences are set
+            } catch (error) {
+                console.error('Error fetching preferences:', error);
+            }
+        };
 
-      <TouchableOpacity style={styles.button} onPress={() => handleCategoryPress('Housing')}>
-        <Text style={styles.buttonText}>Housing</Text>
-      </TouchableOpacity>
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                fetchPreferencesForUser(user);
+            }
+        });
 
-      <TouchableOpacity style={styles.button} onPress={() => handleCategoryPress('New Laws')}>
-        <Text style={styles.buttonText}>New Laws</Text>
-      </TouchableOpacity>
+        // Clean up the listener when the component unmounts
+        return () => unsubscribe();
+    }, []);
 
-      <TouchableOpacity style={styles.button} onPress={() => handleCategoryPress('Upcoming Meetings')}>
-        <Text style={styles.buttonText}>Upcoming Meetings</Text>
-      </TouchableOpacity>
-    </View>
-  );
+    const handleCategoryPress = async (category) => {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        let updatedPreferences;
+
+        if (preferences.includes(category)) {
+            updatedPreferences = preferences.filter((pref) => pref !== category);
+        } else {
+            updatedPreferences = [...preferences, category];
+        }
+
+        setPreferences(updatedPreferences);
+
+        try {
+            const docRef = doc(db, 'users', user.uid);
+            await setDoc(docRef, { preferences: updatedPreferences }, { merge: true });
+        } catch (error) {
+            console.error('Error updating preferences:', error);
+        }
+    };
+
+    return (
+        <View style={styles.modalContainer}>
+            {/* Header with Close Text */}
+            <View style={styles.header}>
+                <TouchableOpacity onPress={onClose}>
+                    <Text style={styles.closeButtonText}>X</Text>
+                </TouchableOpacity>
+                <Text style={styles.headingText}>Preferences</Text>
+            </View>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Text style={styles.headerText}>Select the type of information:</Text>
+                {categories.map((category) => (
+                    <TouchableOpacity
+                        key={category}
+                        style={[
+                            styles.button,
+                            preferences.includes(category) ? styles.buttonSelected : null, // Highlight selected categories
+                        ]}
+                        onPress={() => handleCategoryPress(category)}
+                    >
+                        <Text style={styles.buttonText}>{category}</Text>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-    width: '80%',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 15,
+    },
+    closeButtonText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    headingText: {
+        fontSize: 24,
+        marginLeft: 10,
+    },
+    container: {
+        alignItems: 'center',
+        padding: 20,
+    },
+    headerText: {
+        fontSize: 24,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    button: {
+        backgroundColor: '#007AFF',
+        padding: 15,
+        borderRadius: 10,
+        marginVertical: 10,
+        width: '80%',
+        alignItems: 'center',
+    },
+    buttonSelected: {
+        backgroundColor: '#34C759', // Highlight color for selected categories
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+    },
 });
 
 export default CategorySelection;
