@@ -29,8 +29,8 @@ body {
   padding: 40px 0;
 }
 
-.landing-section img,
-.text-content {
+.landing-section img 
+.text-content{
   width: 45%; /* Ensure both text and image have the same size */
   height: auto;
 }
@@ -46,8 +46,8 @@ body {
 
 /* Add padding between text and image */
 .landing-section img {
-  padding-left: 20px; /* Space between image and text */
-  padding-right: 20px; /* Space between image and text */
+  padding-left: 0px; /* Space between image and text */
+  padding-right: 0px; /* Space between image and text */
 }
 
 .text-content {
@@ -201,7 +201,8 @@ body {
 /* Image Card Layout */
 .card-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 20px;
   padding: 20px;
 }
 .card:hover {
@@ -436,8 +437,7 @@ label {
 }
 
 .landing-section img {
-  width: 100%; /* Adjust image size */
-  max-width: 450px;
+  width: 50%; /* Adjust image size */
   height: auto;
   margin-left: 20px;
 }
