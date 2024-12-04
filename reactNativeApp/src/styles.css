@@ -1,80 +1,12 @@
 /* Universal Styles */
-@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
 
 * {
-  font-family: "lora";
+  font-family: Arial, sans-serif;
 }
 
 body {
-  margin: 0;  
-  background: linear-gradient(135deg, #1f74c3 #dcffff);
-  background-size: 600% 600%;
-
-  -webkit-animation: AnimationName 59s ease infinite;
-  -moz-animation: AnimationName 59s ease infinite;
-  -o-animation: AnimationName 59s ease infinite;
-  animation: AnimationName 59s ease infinite;
-}
-
-@-webkit-keyframes AnimationName {
-  0%{background-position:0% 51%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 51%}
-}
-@-moz-keyframes AnimationName {
-  0%{background-position:0% 51%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 51%}
-}
-@-o-keyframes AnimationName {
-  0%{background-position:0% 51%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 51%}
-}
-@keyframes AnimationName {
-  0%{background-position:0% 51%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 51%}
-}
-img {
-
-  max-width: 35%; /* Keep consistent image size */
-  border-radius: 15px; /* Rounded corners */
-  border: 4px solid #353232; /* Light border for separation */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
-
-
-/* Navbar.css */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #2c3e50;
-  padding: 1rem 2rem;
-  color: #fff;
-}
-
-.navbar-logo {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-logo img {
-  height: 40px;
-  margin-right: 10px;
-}
-
-.navbar-links {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-}
-
-.navbar-links a {
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
+  margin: 0;
+  background:  whitesmoke;
 }
 
 /* Landing Page Styling */
@@ -536,24 +468,86 @@ label {
   gap: 20px;
 }
 
-/* Button Styling */
-.button {
-  display: inline-flex;
-  background-color: #00aacc;
-  justify-content: center;
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 10px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
+.not-found-container {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
+  height: 100vh; /* Full viewport height */
+  padding: 0 20px; /* Add some horizontal padding for small screens */
+  box-sizing: border-box; /* Include padding in the dimensions */
+}
+
+.logo {
+  width: 150px; /* Adjust the size as needed */
+  height: auto; /* Maintain aspect ratio */
+  margin-bottom: 20px; /* Space below the image */
+}
+
+.error-code {
+  font-size: 5rem;
+  margin: 0;
+}
+
+.error-message {
+  font-size: 2rem;
+  margin: 10px 0;
+}
+
+.error-description {
+  font-size: 1.2rem;
   text-align: center;
-  text-transform: uppercase;
-  transition: background-color 0.3s;
+  margin: 10px 0;
+}
+
+.button {
+  padding: 10px 20px; /* Adjust padding for button size */
+  font-size: 1rem;
+  background-color: #007AFF; /* Example button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px; /* Space above the button */
+  transition: background-color 0.3s ease;
+  width: auto; /* Prevent stretching */
+  display: inline-block; /* Keep the button as inline-block to respect content size */
+  text-align: center; /* Center the text within the button */
 }
 
 .button:hover {
-  background-color: #006699;
+  background-color: #005BB5; /* Slightly darker shade on hover */
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0088cc; /* Blue color for navbar */
+  padding-left: 0%;
+  padding-right: 0%;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.navbar-links a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.navbar-links a:hover {
+  color: #cceeff; /* Lighter blue on hover */
 }

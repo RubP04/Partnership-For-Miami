@@ -27,7 +27,7 @@ const Scraper = ({ navigation }) => {
     const [pageInput, setPageInput] = useState('1');
     const [searchQuery, setSearchQuery] = useState('');
     const [isSearchMode, setIsSearchMode] = useState(false);
-    const BATCH_SIZE = 8;
+    const BATCH_SIZE = 12;
 
     const navigate = useNavigate();
     const auth = getAuth();

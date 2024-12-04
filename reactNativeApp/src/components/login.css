@@ -1,422 +1,58 @@
 /* Universal Styles */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #e0f0ff; /* Soft blue background */
-  }
-  
-  
-  
-  
-  /* Navigation Bar */
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #0088cc; /* Blue color for navbar */
-    padding: 10px 20px;
-  }
-  
-  .navbar-logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .navbar-logo img {
-    height: 40px;
-    margin-right: 10px;
-  }
-  
-  .navbar-links a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 18px;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-  
-  .navbar-links a:hover {
-    color: #cceeff; /* Lighter blue on hover */
-  }
-  
-  
-  
-  
-  /* Section Title */
-  .section-title {
-    background-color: #0088cc;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-    margin: 20px auto;
-    width: fit-content;
-    border-radius: 8px;
-  }
-  
-  
-  
-  
-  /* Universal Button Style */
-  .button {
-    display: inline-block;
-    background-color: #00aacc; /* Blue button color */
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    text-align: center;
-    text-transform: uppercase;
-    transition: background-color 0.3s;
-  }
-  
-  .button:hover {
-    background-color: #006699; /* Darker blue on hover */
-  }
-  
-  
-  
-  
-  /* Image Card Layout */
-  .card-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 200px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-  }
-  
-  .card img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .card-title {
-    background-color: #00aacc; /* Match button color */
-    color: white;
-    font-size: 16px;
-    padding: 10px;
-    border-radius: 0 0 10px 10px;
-  }
-  
-  
-  
-  
-  
-  /* Login page styles */
-  .login-container {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .forgot-password {
-    margin-top: 10px;
-    font-size: 14px;
-  }
-  
-  .forgot-password a {
-    color: #007AFF;
-    text-decoration: none;
-  }
-  
-  .forgot-password a:hover {
-    text-decoration: underline;
-  }
-  
-  
-  
-  
-  
-  /* Forgot Password page styles */
-  .forgot-password-container {
-    max-width: 400px;
-    margin: auto;
-    padding: 50px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .forgot-password-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .email-sent-message {
-    font-size: 16px;
-    color: #333;
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .button {
-    background-color: #007AFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-  }
-  
-  .button:hover {
-    background-color: #005BB5;
-  }
-  
-  
-  
-  
-  /* Sign Up page styles */
-  .signup-container {
-    max-width: 400px;
-    margin: auto;
-    padding: 40px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .signup-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .button {
-    background-color: #007AFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-  }
-  
-  .button:hover {
-    background-color: #005BB5;
-  }
-  
-  .login-link {
-    margin-top: 10px;
-    font-size: 14px;
-  }
-  
-  .login-link a {
-    color: #007AFF;
-    text-decoration: none;
-  }
-  
-  .login-link a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Container styles */
-  .form-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    background-color: #ffffff;
-  }
-  
-  /* Heading */
-  .form-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  /* Form and input styles */
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-    position: relative;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .input-field {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .input-field:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  /* Toggle password visibility */
-  .input-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
-  
-  .input-container .input-field {
-    padding-right: 40px;
-  }
-  
-  .toggle-password {
-    position: absolute;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    color: #555;
-  }
-  
-  .toggle-password:hover {
-    color: #000;
-  }
-  
-  /* Buttons */
-  .button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 0;
-  }
-  
-  .button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  /* Error messages */
-  .error {
-    color: red;
-    margin-bottom: 15px;
-    text-align: center;
-    animation: fadeIn 0.3s ease-in-out;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Links */
-  .link {
-    text-align: center;
-    margin-top: 15px;
-  }
-  
-  .link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .link a:hover {
-    text-decoration: underline;
-  }
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #e0f0ff; /* Soft blue background */
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+/* Navigation Bar */
+.navbar {
+  position: fixed; /* Optional: Keeps navbar at the top */
+  top: 0;          /* Ensures it stays at the top */
+  left: 0;         /* Aligns to the left edge of the screen */
+  right: 0;        /* Aligns to the right edge of the screen */
+  width: 100%;     /* Ensures it stretches across the screen */
+  z-index: 100;    /* Ensures it's above other elements */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0088cc; /* Blue color for navbar */
+  padding: 10px 20px; /* Adds internal spacing */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for effect */
+  margin: 0;       /* Removes any default margin */
+}
+
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.navbar-links a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.navbar-links a:hover {
+  color: #cceeff; /* Lighter blue on hover */
+}
+
+/* Main Content Area */
+main {
+  margin-top: 60px; /* Prevents content from overlapping the navbar */
+  padding: 20px;
+  max-width: 800px; /* Center content in the middle */
+  margin-left: auto;
+  margin-right: auto;
+}
