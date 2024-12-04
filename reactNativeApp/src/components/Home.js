@@ -22,7 +22,10 @@ const Home = () => {
       </section>
 
       <section className="landing-section">
+      <img src="Calendar on laptop.jpg" alt="Tracking local events" />
+
         <div className="text-content">
+          
           <h2>Stay Informed</h2>
           <p>
             Keeping up with local government activities can be overwhelming, but
@@ -34,7 +37,6 @@ const Home = () => {
             be an active citizen.
           </p>
         </div>
-        <img src="Calendar on laptop.jpg" alt="Tracking local events" />
       </section>
 
       <section className="landing-section">
