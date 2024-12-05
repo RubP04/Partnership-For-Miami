@@ -49,7 +49,7 @@ return(
         <nav className= "navbar">
             <div className="navbar-logo">
                 <img src="../legal loop.png" alt="Partnership for Miami" />
-                <h1 style={{ color: 'white', fontSize: '24px'}}> Legal Loop</h1>
+                <h1> Legal <span>Loop</span></h1>
             </div>
             <div className="navbar-links">
                 {renderLinks()}

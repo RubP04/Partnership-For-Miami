@@ -41,12 +41,21 @@ body {
   width: 66%; /* Restrict width to 66% of the page */
   margin-bottom: 40px;
   padding: 40px 0;
+  box-sizing: border-box;
 }
 
-.landing-section img,
-.text-content {
-  width: 45%; /* Ensure both text and image have the same size */
+.landing-section img{
+  width: 50%;
   height: auto;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+
+
+.text-content {
+  width: 50%; /* Ensure both text and image have the same size */
+  margin:0 auto;
 }
 
 /* Stagger the order of text and image */
@@ -58,10 +67,20 @@ body {
   flex-direction: row;
 }
 
+.left-image {
+  order: 1;
+  align-self: flex-start;
+}
+
+.right-image {
+  order: 2;
+  align-self: flex-end;
+}
+
 /* Add padding between text and image */
 .landing-section img {
-  padding-left: 20px; /* Space between image and text */
-  padding-right: 20px; /* Space between image and text */
+  padding-left: 0px; /* Space between image and text */
+  padding-right: 0px; /* Space between image and text */
 }
 
 .text-content {
@@ -70,7 +89,7 @@ body {
   background-color: white;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  margin-right: 20px;
+  margin-right: 40px;
   width: calc(50% - 20px);
   box-sizing: border-box;
   display: flex;

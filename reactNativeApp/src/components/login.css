@@ -45,6 +45,18 @@ body {
   text-transform: uppercase;
 }
 
+.navbar-logo h1 {
+  margin: 0;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  gap: 5px;
+}
+
+.navbar-logo h1 span {
+  margin-left: 0;
+}
 .navbar-links a:hover {
   color: #cceeff; /* Lighter blue on hover */
 }

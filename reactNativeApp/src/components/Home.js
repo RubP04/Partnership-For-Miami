@@ -18,11 +18,11 @@ const Home = () => {
             you’ll never miss an important update that impacts your community.
           </p>
         </div>
-        <img src="Community kids.jpg" alt="Community working together" />
+        <img className="left-image" src="Community kids.jpg" alt="Community working together" />
       </section>
 
       <section className="landing-section">
-      <img src="Calendar on laptop.jpg" alt="Tracking local events" />
+      <img  className="right-image" src="Calendar on laptop.jpg" alt="Tracking local events" />
 
         <div className="text-content">
           
@@ -52,7 +52,7 @@ const Home = () => {
             neighborhood.
           </p>
         </div>
-        <img src="bro fist.jpg" alt="Civic engagement" />
+        <img  className= "left image" src="bro fist.jpg" alt="Civic engagement" />
       </section>
 
       {/* Final Paragraph and Buttons */}
