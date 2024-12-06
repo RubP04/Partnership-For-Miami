@@ -425,10 +425,11 @@ const styles = StyleSheet.create({
     },
     searchContainer: {
         flexDirection: 'row',
-        marginBottom: 10,
+        marginBottom: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
+        width: '50%',
+        alignSelf: 'center'
     },
     searchInput: {
         flex: 1,
@@ -453,7 +454,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF3B30',
         padding: 10,
         borderRadius: 5,
-    },
+        marginTop: 10,
+        },
     clearSearchButtonText: {
         color: 'white',
         fontWeight: '600',
@@ -478,7 +480,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         left: 0,
-        width: '70%',
+        width: '40%',
         height: '100%',
         backgroundColor: '#fff',
         paddingTop: 50,
