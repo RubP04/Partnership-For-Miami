@@ -4,6 +4,7 @@ body {
   font-family: Arial, sans-serif;
   background-color: #e0f0ff; /* Soft blue background */
   box-sizing: border-box; /* Includes padding and borders in width/height */
+  padding-top: 60px;
 }
 
 /* Navigation Bar */
